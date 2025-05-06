@@ -5,6 +5,13 @@ import { toast } from 'vue3-toastify';
 import { useRoute } from 'vue-router';
 import 'primeicons/primeicons.css'
 
+defineProps({
+  todo: {
+    type: Object,
+    required: true
+  }
+})
+
 const router = useRoute();
 
 async function markDone(id) {
@@ -76,6 +83,7 @@ async function submitEdit() {
             <i class="pi pi-check-circle"></i>
         </button>
         <button
+            v-if="!todo.is_completed"
             class="p-1 ml-2 border-2 rounded text-blue-600 border-blue-600 hover:text-white hover:bg-blue-600"
             @click="openEditModal(todo)"
             title="Edit Task"
