@@ -3,8 +3,7 @@ import Header from './components/Header.vue';
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col">
-        <!-- Header -->
+    <div class="min-h-screen flex flex-col bg-gray-800">
         <Header />
 
         <!-- Main content area -->
@@ -13,7 +12,7 @@ import Header from './components/Header.vue';
         </main>
 
         <!-- Footer -->
-        <footer class="bg-blue-600 text-white p-4 text-center">
+        <footer class="bg-gray-900 text-white p-4 text-center fixed bottom-0 left-0 right-0">
             <p>&copy; 2025 My App. All rights reserved.</p>
         </footer>
     </div>

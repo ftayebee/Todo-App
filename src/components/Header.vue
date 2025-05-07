@@ -1,42 +1,35 @@
 <script setup>
-import { computed } from 'vue';
-import { useAuthStore } from '../store/authStore'; // Import the store
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../store/authStore'
+import { toast } from 'vue3-toastify'
 import api from '../services/api';
-import { toast } from 'vue3-toastify';
-import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const authStore = useAuthStore();
-const isAuthenticated = computed(() => authStore.isAuthenticated);
 
 async function logout() {
-    const router = useRouter();
-    const authStore = useAuthStore();
+  try {
+    await api.post('logout');
+  } catch (error) {
+    console.error('Logout API error:', error);
+    toast.error('Logout failed on server.');
+  }
 
-    try {
-        // Hit the logout API endpoint
-        await api.post('logout');
-    } catch (error) {
-        console.error('Logout API error:', error);
-        toast.error('Logout failed on server.');
-        // Proceed anyway to clear session
-    }
+  authStore.logout();
 
-    // Clear state/store
-    authStore.logout();
+  localStorage.removeItem('user_token');
+  localStorage.removeItem('user_data');
+  sessionStorage.removeItem('user_token');
+  sessionStorage.removeItem('user_data');
 
-    // Remove tokens
-    localStorage.removeItem('user_token');
-    localStorage.removeItem('user_data');
-    sessionStorage.removeItem('user_token');
-    sessionStorage.removeItem('user_data');
-
-    toast.success('Logged out successfully');
-    router.push('/login');
+  toast.success('Logged out successfully');
+  router.push('/login');
 }
 </script>
 
+
 <template>
-    <header class="bg-blue-600 text-white p-4">
+    <header class="bg-gray-900 text-white p-4 fixed top-0 left-0 right-0 z-10">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold flex items-center italic">
                 <img
@@ -48,16 +41,16 @@ async function logout() {
             </h1>
             <nav>
                 <ul class="flex space-x-4">
-                    <li v-if="!isAuthenticated">
+                    <li v-if="!authStore.isAuthenticated">
                         <router-link to="/login" class="text-lg hover:underline">Login</router-link>
                     </li>
-                    <li v-if="!isAuthenticated">
+                    <li v-if="!authStore.isAuthenticated">
                         <router-link to="/register" class="text-lg hover:underline">Register</router-link>
                     </li>
-                    <li v-if="isAuthenticated">
+                    <li v-if="authStore.isAuthenticated">
                         <router-link to="/todos" class="text-lg hover:underline">Todo List</router-link>
                     </li>
-                    <li v-if="isAuthenticated">
+                    <li v-if="authStore.isAuthenticated">
                         <button @click="logout" class="text-lg hover:underline">Logout</button>
                     </li>
                 </ul>
