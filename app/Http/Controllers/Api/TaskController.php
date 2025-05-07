@@ -35,6 +35,7 @@ class TaskController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
+                'description' => 'required|string',
                 'is_completed' => 'nullable|boolean'
             ]);
 
@@ -47,7 +48,8 @@ class TaskController extends Controller
 
             $task = $request->user()->tasks()->create([
                 'title' => $request->title,
-                'is_completed' => $request->is_completed,
+                'description' => $request->description,
+                'is_completed' => $request->is_completed ?? false,
             ]);
 
             return response()->json([
@@ -79,6 +81,7 @@ class TaskController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'title' => 'sometimes|required|string|max:255',
+                'description' => 'sometimes|required|string',
                 'is_completed' => 'nullable|boolean'
             ]);
 
@@ -89,7 +92,7 @@ class TaskController extends Controller
                 ], 422);
             }
 
-            $task->update($request->only(['title', 'is_completed']));
+            $task->update($request->only(['title', 'is_completed', 'description']));
 
             return response()->json([
                 'message' => 'Task updated successfully.',
