@@ -16,8 +16,8 @@ This is a simple Todo API built with Laravel 12 using Sanctum for authentication
 
 This API uses **Laravel Sanctum** for token-based authentication.
 
-= Test Username: fahim.tayebee@gmail.com
-= Test password: 12345678
+= Test Username: trtayebee089@gmail.com
+= Test password: 17354583089
 
 ---
 
